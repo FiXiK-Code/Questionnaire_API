@@ -1,0 +1,66 @@
+﻿CREATE TABLE DBSurvey (
+    Id SERIAL PRIMARY KEY,
+    Name TEXT,
+    Description TEXT,
+    CountQuestions INT,
+    Type TEXT,
+    Category TEXT,
+    DateCreation DATE,
+    EndDate DATE
+);
+
+CREATE TABLE DBRespondent (
+    Id SERIAL PRIMARY KEY,
+    FirstName TEXT,
+    LastName TEXT,
+    Gender TEXT,
+    Age INT,
+    Region TEXT
+);
+
+CREATE TABLE DBQuestion (
+    Id SERIAL PRIMARY KEY,
+    SurveyId INT,
+    QuestionNumber INT,
+    Text TEXT,
+    Type TEXT,
+    FOREIGN KEY (SurveyId) REFERENCES DBSurvey(Id)
+);
+
+CREATE TABLE DBAnswer (
+    Id SERIAL PRIMARY KEY,
+    QuestionId INT,
+    Text TEXT,
+    FOREIGN KEY (QuestionId) REFERENCES DBQuestion(Id)
+);
+
+
+CREATE TABLE DBInterview (
+    Id SERIAL PRIMARY KEY,
+    SurveyId INT,
+    DateTime TIMESTAMP,
+    RespondentId INT,
+    FOREIGN KEY (SurveyId) REFERENCES DBSurvey(Id),
+    FOREIGN KEY (RespondentId) REFERENCES DBRespondent(Id)
+);
+
+CREATE TABLE DBResult (
+    Id SERIAL PRIMARY KEY,
+    QuestionId INT,
+    Answer TEXT,
+    RespondentId INT,
+    InterviewId INT,
+    FOREIGN KEY (QuestionId) REFERENCES DBQuestion(Id),
+    FOREIGN KEY (RespondentId) REFERENCES DBRespondent(Id),
+    FOREIGN KEY (InterviewId) REFERENCES DBInterview(Id)
+);
+
+CREATE INDEX idx_survey_category ON DBSurvey (Category);
+CREATE INDEX idx_survey_id ON DBSurvey (Id);
+CREATE INDEX idx_survey_type ON DBSurvey (Type);
+CREATE INDEX idx_question_id ON DBQuestion (Id);
+CREATE INDEX idx_question_survey_id ON DBQuestion (SurveyId);
+CREATE INDEX idx_answer_question_id ON DBAnswer (QuestionId);
+CREATE INDEX idx_interview_survey_id ON DBInterview (SurveyId);
+CREATE INDEX idx_result_interview_id ON DBResult (InterviewId);
+
