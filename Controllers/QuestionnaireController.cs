@@ -43,7 +43,7 @@ public class QuestionnaireController : ControllerBase
     public async Task<ActionResult> SendAnswer([FromBody] AnswerPostParam answer)
     {
         var interview = await _interviewService.GetInterview(answer.QuestionId, answer.RespondentId);
-        if(interview == null)
+        if (interview == null)
         {
             var surey = await _surveyService.GetSurvey(answer.QuestionId);
             if (surey == null) return NotFound("Surey not found");
@@ -55,19 +55,17 @@ public class QuestionnaireController : ControllerBase
                 datetime = DateTime.Now
             };
             await _interviewService.UpdateInterview(interview);
-        } 
+        }
 
         var result = new Result
         {
-             answer = string.Join(", ", answer.Answers),
-             interviewid = interview.id,
-             questionid = answer.QuestionId,
-             respondentid = answer.RespondentId
+            ansver = string.Join(", ", answer.Answers),
+            interviewid = interview.id,
+            questionid = answer.QuestionId,
+            respondentid = answer.RespondentId
         };
         await _resultService.UpdateResult(result);
 
         return Ok(await _questionService.GetNextQuestion(answer.QuestionId));
     }
 }
-
-
