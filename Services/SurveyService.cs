@@ -4,11 +4,11 @@ using Questionnaire_API.Models;
 
 namespace Questionnaire_API.Services
 {
-	public class SyrveyService : ISyrveyService
+	public class SurveyService : ISurveyService
     {
         private readonly AppDbContext _appDB;
 
-        public SyrveyService(AppDbContext appDB)
+        public SurveyService(AppDbContext appDB)
         {
             _appDB = appDB;
         }

@@ -10,15 +10,15 @@ public class QuestionnaireController : ControllerBase
     private readonly IQuestionService _questionService;
     private readonly IResultService _resultService;
     private readonly IInterviewService _interviewService;
-    private readonly ISyrveyService _syrveyService;
+    private readonly ISurveyService _surveyService;
 
-    public QuestionnaireController(IAnswerService answerService, IQuestionService questionService, IResultService resultService, IInterviewService interviewService, ISyrveyService syrveyService)
+    public QuestionnaireController(IAnswerService answerService, IQuestionService questionService, IResultService resultService, IInterviewService interviewService, ISurveyService surveyService)
     {
         _answerService = answerService;
         _questionService = questionService;
         _resultService = resultService;
         _interviewService = interviewService;
-        _syrveyService = syrveyService;
+        _surveyService = surveyService;
     }
 
     [HttpGet("{questionId}")]
@@ -45,7 +45,7 @@ public class QuestionnaireController : ControllerBase
         var interview = await _interviewService.GetInterview(answer.QuestionId, answer.RespondentId);
         if(interview == null)
         {
-            var surey = await _syrveyService.GetSurvey(answer.QuestionId);
+            var surey = await _surveyService.GetSurvey(answer.QuestionId);
             if (surey == null) return NotFound("Surey not found");
 
             interview = new Interview
@@ -59,7 +59,7 @@ public class QuestionnaireController : ControllerBase
 
         var result = new Result
         {
-             ansver = string.Join(", ", answer.Answers),
+             answer = string.Join(", ", answer.Answers),
              interviewid = interview.id,
              questionid = answer.QuestionId,
              respondentid = answer.RespondentId
